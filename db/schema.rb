@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180924071722) do
+ActiveRecord::Schema.define(version: 20181108142513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,16 @@ ActiveRecord::Schema.define(version: 20180924071722) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "budget_content_blocks", force: :cascade do |t|
+    t.integer  "heading_id"
+    t.text     "body"
+    t.string   "locale"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "budget_content_blocks", ["heading_id"], name: "index_budget_content_blocks_on_heading_id", using: :btree
+
   create_table "budget_groups", force: :cascade do |t|
     t.integer "budget_id"
     t.string  "name",                 limit: 50
@@ -152,10 +162,11 @@ ActiveRecord::Schema.define(version: 20180924071722) do
 
   create_table "budget_headings", force: :cascade do |t|
     t.integer "group_id"
-    t.string  "name",       limit: 50
-    t.integer "price",      limit: 8
+    t.string  "name",                 limit: 50
+    t.integer "price",                limit: 8
     t.integer "population"
     t.string  "slug"
+    t.boolean "allow_custom_content",            default: false
   end
 
   add_index "budget_headings", ["group_id"], name: "index_budget_headings_on_group_id", using: :btree
@@ -580,7 +591,7 @@ ActiveRecord::Schema.define(version: 20180924071722) do
     t.string   "locale",                       null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
-    t.text     "title"
+    t.string   "title"
     t.text     "changelog"
     t.text     "body"
     t.text     "body_html"
@@ -1163,17 +1174,17 @@ ActiveRecord::Schema.define(version: 20180924071722) do
   add_index "site_customization_images", ["name"], name: "index_site_customization_images_on_name", unique: true, using: :btree
 
   create_table "site_customization_page_translations", force: :cascade do |t|
-      t.integer  "site_customization_page_id", null: false
-      t.string   "locale",                     null: false
-      t.datetime "created_at",                 null: false
-      t.datetime "updated_at",                 null: false
-      t.string   "title"
-      t.string   "subtitle"
-      t.text     "content"
-    end
+    t.integer  "site_customization_page_id", null: false
+    t.string   "locale",                     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "title"
+    t.string   "subtitle"
+    t.text     "content"
+  end
 
-    add_index "site_customization_page_translations", ["locale"], name: "index_site_customization_page_translations_on_locale", using: :btree
-    add_index "site_customization_page_translations", ["site_customization_page_id"], name: "index_7fa0f9505738cb31a31f11fb2f4c4531fed7178b", using: :btree
+  add_index "site_customization_page_translations", ["locale"], name: "index_site_customization_page_translations_on_locale", using: :btree
+  add_index "site_customization_page_translations", ["site_customization_page_id"], name: "index_7fa0f9505738cb31a31f11fb2f4c4531fed7178b", using: :btree
 
   create_table "site_customization_pages", force: :cascade do |t|
     t.string   "slug",                                 null: false
@@ -1418,6 +1429,12 @@ ActiveRecord::Schema.define(version: 20180924071722) do
   add_index "votes", ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope", using: :btree
   add_index "votes", ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope", using: :btree
 
+  create_table "web_sections", force: :cascade do |t|
+    t.text     "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "widget_card_translations", force: :cascade do |t|
     t.integer  "widget_card_id", null: false
     t.string   "locale",         null: false
@@ -1448,12 +1465,6 @@ ActiveRecord::Schema.define(version: 20180924071722) do
     t.integer  "limit",      default: 3
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-  end
-
-  create_table "web_sections", force: :cascade do |t|
-    t.text     "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "administrators", "users"
