@@ -1,6 +1,4 @@
 es:
-  true_value: 'Si'
-  false_value: 'No'
   admin:
     header:
       title: Administración
@@ -130,6 +128,7 @@ es:
         table_heading: Partida
         table_amount: Cantidad
         table_population: Población
+        table_allow_custom_contents: Se permite contenido personalizado
         population_info: "El campo población de las partidas presupuestarias se usa con fines estadísticos únicamente, con el objetivo de mostrar el porcentaje de votos habidos en cada partida que represente un área con población. Es un campo opcional, así que puedes dejarlo en blanco si no aplica."
         max_votable_headings: "Máximo número de partidas en que un usuario puede votar"
         current_of_max_headings: "%{current} de %{max}"
@@ -1115,6 +1114,8 @@ es:
       author: Autor
       content: Contenido
       created_at: Fecha de creación
+      true_value: 'Si'
+      false_value: 'No'
     spending_proposals:
       index:
         geozone_filter_all: Todos los ámbitos de actuación
